@@ -1,4 +1,5 @@
 import NextAuth from 'next-auth';
+import axios from 'axios';
 import CredentialsProvider from "next-auth/providers/credentials";
 
 export default NextAuth({
@@ -16,15 +17,20 @@ export default NextAuth({
                     type: "password",
                 }
             },
-            authorize: (credentials) => {
-                if (credentials.email === 'johndoe@mail.com' && credentials.password === 'test') {
-                    return {
-                        id: 2,
-                        name: 'John',
-                        email: 'johndoe@mail.com'
+            authorize: async (credentials) => {
+                try {
+                    let { data: { data: user } } = await axios.get('https://reqres.in/api/users/2')
+                    if (user) {
+                        console.log(user)
+                        return { id: user.id, email: user.email, name: user.first_name + ' ' + user.last_name, avatar: user.avatar }
                     }
+                    return null;
+
+                } catch (error) {
+                    throw new Error('Credentials does not match')
                 }
-                return null;
+
+
             },
         })
     ],
@@ -48,7 +54,8 @@ export default NextAuth({
         secret: 'test',
         encryption: true,
     },
-    // pages: {
-    //     signIn: '/login'
-    // }
+    pages: {
+        signIn: '/login',
+        error: '/login'
+    }
 })

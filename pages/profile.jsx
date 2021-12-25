@@ -7,8 +7,6 @@ const Profile = () => {
     const authentication = useSession();
     const router = useRouter();
 
-    console.log(authentication)
-
     return (
         <Protected className="h-screen w-screen bg-slate-300 flex flex-col justify-center items-center">
             <div className="w-96 p-5 border rounded-xl shadow-lg text-center bg-white">
