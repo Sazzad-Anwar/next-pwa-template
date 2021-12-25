@@ -1,9 +1,14 @@
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/router"
 import { useEffect } from "react"
 import NavLink from "./NavLink"
+import { signOut, useSession } from 'next-auth/react';
 
 const Nav = () => {
+
+    const authentication = useSession();
+    const router = useRouter();
 
     useEffect(() => {
 
@@ -11,7 +16,7 @@ const Nav = () => {
     }, [])
 
     return (
-        <header className="w-screen">
+        <header>
             <nav className="container mx-auto">
                 <div className="flex flex-col lg:flex-row justify-between items-center py-3">
                     <div className="flex justify-between items-center w-full">
@@ -35,19 +40,18 @@ const Nav = () => {
                                     lg:top-[3.9rem] 
                                     left-0 
                                     right-0 
-                                    h-0
+                                    hidden
                                     opacity-0 
-                                    group-hover:h-auto 
                                     group-hover:opacity-100 
-                                    normal-transition                                 
-                                    group-hover:shadow-lg 
+                                    group-hover:block 
+                                    normal-transition  
+                                    shadow-sm                               
                                     border 
                                     px-0 
-                                    py-4 
-                                    lg:py-4 
+                                    bg-white
                                     lg:px-4"
                             >
-                                <div className="container mx-auto ">
+                                <div className="container mx-auto py-4">
                                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
                                         <div>
                                             <Image layout="responsive" height={300} width={400} src="https://picsum.photos/300" alt="product-1" />
@@ -102,6 +106,18 @@ const Nav = () => {
                                     </div>
                                 </div>
                             </div>
+                        </li>
+                        {authentication?.data?.user &&
+                            <li className="py-2 lg:py-0 lg:px-5 group">
+                                <NavLink href="/profile" className="nav-hover border-b border-white py-2">Profile</NavLink>
+                            </li>
+                        }
+                        <li className="py-2 lg:py-0 lg:px-5 group">
+                            {authentication?.data?.user ? <p onClick={() => {
+                                signOut();
+                                router.push('/login');
+                            }} className="nav-hover border-b border-white py-2 cursor-pointer">Log Out</p> :
+                                <NavLink href="/login" className="nav-hover border-b border-white py-2">Login</NavLink>}
                         </li>
                     </ul>
                 </div>

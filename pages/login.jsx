@@ -2,6 +2,7 @@ import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import Loader from "../components/Loader";
+import Layout from './../components/Layout';
 
 export default function Login() {
 
@@ -29,9 +30,9 @@ export default function Login() {
 
 
     return (
-        <div>
+        <Layout>
             {authentication && (authentication.status === 'loading' || authentication.data) ? <Loader /> :
-                <div className="h-screen w-screen flex justify-center items-center bg-slate-300">
+                <div className="h-screen flex justify-center items-center bg-slate-300">
                     <form onSubmit={handleSubmit} className="border h-auto w-full lg:w-96 p-5 rounded-xl shadow-lg bg-white">
                         <h1 className="text-center text-2xl font-semibold mb-4">Sign In</h1>
                         {router.query.error && <p className="bg-red-500 py-3 w-full rounded-lg text-white text-center my-1">{router.query.error}</p>}
@@ -41,7 +42,7 @@ export default function Login() {
                     </form>
                 </div>
             }
-        </div>
+        </Layout>
 
     )
 
