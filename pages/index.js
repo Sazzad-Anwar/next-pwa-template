@@ -7,10 +7,8 @@ import Nav from '../components/Nav'
 
 export default function Home() {
 
-  const { data: session } = useSession();
+  const data = useSession();
   const router = useRouter()
-
-  console.log(session)
 
   return (
     <div className={styles.container}>
